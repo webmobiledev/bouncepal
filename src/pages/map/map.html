@@ -1,0 +1,31 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Recommendations</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="add()">
+        <ion-icon name="add-circle"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <div #map id="map"></div>
+  <div id="details" *ngIf="showDetails">
+    <ion-card>
+      <img *ngIf="markerData.image" src="{{markerData.image}}">
+      <ion-card-content>
+        <ion-card-title>{{markerData.title}}</ion-card-title>
+        <p style="font-size: 16px;">{{markerData.description}}</p>
+        <p text-right style="font-size: 12px; margin-top: 15px;">{{markerData.location}}</p>
+      </ion-card-content>
+    </ion-card>
+    <button ion-button icon-end clear icon-only id="btnClose" (click)="closeDetail()">
+      <ion-icon name="close"></ion-icon>
+    </button>
+  </div>
+</ion-content>

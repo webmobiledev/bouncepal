@@ -1,0 +1,76 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Survey Add</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="save()">
+        <ion-icon name="md-checkmark"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div *ngIf="groups.length === 0">
+    <h5 text-center>You don't have any group.<br>Please create a group first.</h5>
+  </div>
+  <div *ngIf="groups.length > 0" text-center>
+    <ion-item>
+      <ion-label>Group</ion-label>
+      <ion-select [(ngModel)]="group">
+        <ion-option [value]="g" *ngFor="let g of groups">{{g.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <p class="error" *ngIf="errors['group']">{{errors['group']}}</p>
+    <ion-item>
+      <ion-label floating>Choose a survey type</ion-label>
+      <ion-select [(ngModel)]="type">
+        <ion-option *ngFor="let type of surveyTypes" [value]="type">{{type}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>{{type === 'Question' ? 'Enter a question' : 'Enter a description'}}</ion-label>
+      <ion-textarea [(ngModel)]="message" (keypress)="removeErrors('message')"></ion-textarea>
+    </ion-item>
+    <p class="error" *ngIf="errors['message']">{{errors['message']}}</p>
+    <div [ngSwitch]="type">
+      <div *ngSwitchCase="'Question'">
+        <ion-item>
+          <ion-label floating>Enter an answer</ion-label>
+          <ion-input [(ngModel)]="answer"></ion-input>
+          <button ion-button clear item-end class="btn-answer" [disabled]="!answer" (click)="addAnswer()">
+            <ion-icon name="md-checkmark"></ion-icon>
+          </button>
+        </ion-item>
+        <p class="error" *ngIf="answers.length === 0">At least one answer is required</p>
+        <ion-chip *ngFor="let a of answers; let i = index" color="primary">
+          <ion-label>{{a}}</ion-label>
+          <button ion-button clear color="light" (click)="delete(i)">
+            <ion-icon name="close-circle"></ion-icon>
+          </button>
+        </ion-chip>
+      </div>
+      <div *ngSwitchCase="'Poll'">
+        <ion-row>
+          <ion-col>
+            <p>First item</p>
+            <button ion-button block color="light" (click)="showButtons(1)"><ion-icon name="add"></ion-icon></button>
+            <img *ngIf="pollImg1" [src]="pollImg1 | formatImage">
+          </ion-col>
+          <ion-col>
+            <p>Second item</p>
+            <button ion-button block color="light" (click)="showButtons(2)"><ion-icon name="add"></ion-icon></button>
+            <img *ngIf="pollImg2" [src]="pollImg2 | formatImage">
+          </ion-col>
+        </ion-row>
+        <p class="error" *ngIf="errors['poll']">{{errors['poll']}}</p>
+      </div>
+    </div>
+    <button ion-button round color="primary" *ngIf="type !== 'Poll'" (click)="showButtons(0)">Choose an Image</button>
+    <img *ngIf="image && type !== 'Poll'" [src]="image | formatImage">
+    <input id="file-input" type="file" name="name" accept="image/*" style="display: none;" (change)="readFile()"/>
+  </div>
+</ion-content>

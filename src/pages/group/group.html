@@ -1,0 +1,63 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Group</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="add()">
+        <ion-icon name="add-circle"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <div padding>
+    <ion-segment [(ngModel)]="type">
+      <ion-segment-button value="yourGroups">
+        Your Groups
+      </ion-segment-button>
+      <ion-segment-button value="invitedGroups">
+        Invited Groups
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+  <div [ngSwitch]="type">
+    <ion-list *ngSwitchCase="'yourGroups'">
+      <ion-item-sliding *ngFor="let g of groups">
+        <ion-item>
+          <ion-avatar item-start>
+            <img [src]="g.image ? (g.image | formatImage) : 'assets/imgs/group.png'">
+          </ion-avatar>
+          <h2>{{g.name}}</h2>
+          <p *ngIf="g.description">{{g.description}}</p>
+          <ion-buttons item-end>
+            <button ion-button icon-only outline small color="primary" *ngIf="g.type !== 'all'" (click)="edit(g)">
+              <ion-icon name="md-create"></ion-icon>
+            </button>
+            <button ion-button icon-only outline small color="danger" (click)="delete(g)">
+              <ion-icon name="trash"></ion-icon>
+            </button>
+          </ion-buttons>
+        </ion-item>
+      </ion-item-sliding>
+    </ion-list>
+    <h5 *ngIf="groups.length === 0 && type === 'yourGroups'" text-center>You don't have any group.<br>Please create a group.</h5>
+
+    <ion-list *ngSwitchCase="'invitedGroups'">
+      <ion-item-sliding *ngFor="let g of invitedGroups">
+        <ion-item>
+          <h2>{{g.groupName}}</h2>
+          <p *ngIf="groupCreators[g.id]">Owner: {{groupCreators[g.id]}}</p>
+          <ion-buttons item-end>
+            <button ion-button (click)="accept(g)" small outline>Accept</button>
+            <button ion-button (click)="decline(g)" color="danger" outline small>Decline</button>
+          </ion-buttons>
+        </ion-item>
+      </ion-item-sliding>
+    </ion-list>
+    <h5 *ngIf="invitedGroups.length === 0 && type === 'invitedGroups'" text-center>You don't have any invitations.</h5>
+  </div>
+</ion-content>

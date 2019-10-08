@@ -1,0 +1,17 @@
+page-survey-add {
+    .error {
+        color: #f53d3d;
+        font-size: 12px;
+    }
+
+    .btn-answer {
+        margin: 25px 0 0 !important;
+        .button-inner {
+            font-size: 25px;
+        }
+    }
+
+    ion-chip {
+        margin: 3px 5px !important;
+    }
+}

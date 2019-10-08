@@ -1,0 +1,95 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Home</ion-title>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-item>
+      <ion-label>Group</ion-label>
+      <ion-select [(ngModel)]="group" (ionChange)="selectGroup()">
+        <ion-option [value]="g.id" *ngFor="let g of groups">{{g.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <h5 *ngIf="groups.length === 0" text-center>You don't have any group.<br>Please create a group first.</h5>
+  <h5 *ngIf="groups.length > 0 && surveys.length === 0" text-center>There are no surveys for this group.</h5>
+  <ion-card *ngFor="let s of surveys">
+    <ion-item>
+      <ion-avatar item-start>
+        <img src="assets/imgs/small-logo.png">
+      </ion-avatar>
+      <h2>{{s.type}}</h2>
+      <ion-note>
+        {{s.created_at | timeFormat}}
+      </ion-note>
+    </ion-item>
+    <img *ngIf="s.image" [src]="s.image | formatImage">
+    <ion-card-content>
+      <p>{{s.message}}</p>
+    </ion-card-content>
+    <ion-row *ngIf="s.type === 'Question'">
+      <ion-col *ngFor="let a of s.answers">
+        <button ion-button icon-start clear small>
+          <div>{{a}} {{s[a] ? s[a] : 0}}</div>
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="s.type === 'Review'" padding-bottom>
+      <ion-col col-12 padding-left>
+        <button class="btnStar" [color]="s.avgReview >= 1 ? 'red' : 'lightRed'" ion-button icon-start clear><ion-icon name="star"></ion-icon></button>
+        <button class="btnStar" [color]="s.avgReview >= 2 ? 'red' : 'lightRed'" ion-button icon-start clear><ion-icon name="star"></ion-icon></button>
+        <button class="btnStar" [color]="s.avgReview >= 3 ? 'red' : 'lightRed'" ion-button icon-start clear><ion-icon name="star"></ion-icon></button>
+        <button class="btnStar" [color]="s.avgReview >= 4 ? 'red' : 'lightRed'" ion-button icon-start clear><ion-icon name="star"></ion-icon></button>
+        <button class="btnStar" [color]="s.avgReview >= 5 ? 'red' : 'lightRed'" ion-button icon-start clear><ion-icon name="star"></ion-icon></button>
+      </ion-col>
+      <ion-col color="primary" padding-left>Reviews: {{s.reviewUsers ? s.reviewUsers.length : 0}}</ion-col>
+      <ion-col color="primary">Total Review: {{s.totalReview ? s.totalReview : 0}}</ion-col>
+    </ion-row>
+    <ion-row *ngIf="s.type === 'Recommendation'">
+      <ion-col>
+        <button ion-button icon-start clear small (click)="showComment = true">
+          <ion-icon name="text"></ion-icon>
+          <div>{{s.comments ? s.comments.length : 0}} Recommendations</div>
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-list *ngIf="showComment && s.comments && s.type === 'Recommendation'">
+      <ion-item *ngFor="let c of s.comments">
+        <p class="comment">{{c.comment}}</p>
+        <p class="date" text-right>{{c.created_at | timeFormat}}</p>
+      </ion-item>
+    </ion-list>
+    <ion-row *ngIf="s.type === 'Poll'">
+      <ion-col text-center>
+        <img *ngIf="s.poll1Img" [src]="s.poll1Img | formatImage" height="300" style="object-fit:contain;">
+        <button ion-button icon-start small disabled>{{s.poll1 ? s.poll1 : 0}} Vote</button>
+      </ion-col>
+      <ion-col text-center>
+        <img *ngIf="s.poll2Img" [src]="s.poll2Img | formatImage" height="300" style="object-fit:contain;">
+        <button ion-button icon-start small disabled>{{s.poll2 ? s.poll2 : 0}} Vote</button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+  <ion-fab right bottom>
+    <button ion-fab (click)="addSurvey()" color="secondary" [disabled]="groups.length === 0"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
+</ion-content>
+
+
+<!-- <ion-col *ngIf="s.type === 'default'">
+  <button ion-button icon-start clear small disabled>
+    <ion-icon name="thumbs-up"></ion-icon>
+    <div>{{s.like ? s.like : 0}}</div>
+  </button>
+</ion-col>
+<ion-col *ngIf="s.type === 'default'">
+  <button ion-button icon-start clear small disabled>
+    <ion-icon name="thumbs-down"></ion-icon>
+    <div>{{s.dislike ? s.dislike : 0}}</div>
+  </button>
+</ion-col> -->

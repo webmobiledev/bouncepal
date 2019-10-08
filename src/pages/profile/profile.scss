@@ -1,0 +1,13 @@
+page-profile {
+    ion-avatar {
+        img {
+            display: inline;
+            border-radius: 50%;
+        }
+    }
+
+    .error {
+        color: #f53d3d;
+        font-size: 12px;
+    }
+}

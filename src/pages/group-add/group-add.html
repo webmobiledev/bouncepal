@@ -1,0 +1,36 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{title}}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="save()">
+        <ion-icon name="md-checkmark"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list text-center>
+    <ion-item>
+      <ion-label floating>Name</ion-label>
+      <ion-input type="text" value="" [(ngModel)]="name" (keypress)="removeErrors('name')"></ion-input>
+    </ion-item>
+    <p class="error" *ngIf="errors['name']">{{errors['name']}}</p>
+    <ion-item>
+      <ion-label floating>Description</ion-label>
+      <ion-textarea [(ngModel)]="description"></ion-textarea>
+    </ion-item>
+    <img *ngIf="image" [src]="image | formatImage">
+    <button ion-button round color="primary" (click)="showButtons()">Choose a group image</button>
+    <ion-searchbar (ionInput)="filterUsers()" [(ngModel)]="searchVal" placeholder="Search user"></ion-searchbar>
+    <ion-item *ngFor="let u of filteredUsers">
+      <ion-label>{{u.displayName}}</ion-label>
+      <ion-checkbox [checked]="checkExist(u.phoneNumbers)" (ionChange)="selectUser(u.phoneNumbers, $event)"></ion-checkbox>
+    </ion-item>
+    <input id="file-input" type="file" name="name" accept="image/*" style="display: none;" (change)="readFile()"/>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,7 @@
+{
+  "name": "BouncePal-Ionic",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}

@@ -1,0 +1,25 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Support</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="save()">
+        <ion-icon name="md-checkmark"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding text-center>
+  <ion-item>
+    <ion-label floating>Briefly explain what's happened</ion-label>
+    <ion-textarea rows="5" [(ngModel)]="description" (keypress)="removeErrors('description')"></ion-textarea>
+  </ion-item>
+  <p class="error" *ngIf="errors['description']">{{errors['description']}}</p>
+  <img *ngIf="image" [src]="image | formatImage">
+  <button ion-button round color="primary" (click)="showButtons()">Upload an Image</button>
+  <input id="file-input" type="file" name="name" accept="image/*" style="display: none;" (change)="readFile()"/>
+</ion-content>

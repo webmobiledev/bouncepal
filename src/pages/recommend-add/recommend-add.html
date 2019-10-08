@@ -1,0 +1,48 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Recommendation Add</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="save()">
+        <ion-icon name="md-checkmark"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content text-center>
+  <h5>Recommend good places to BouncePal users!</h5>
+  <form [formGroup]="form">
+    <ion-searchbar
+      autocorrect="on"
+      #autocompleteText id="autocompleteText"
+      placeholder="Search location"
+      formControlName="location"
+      (ionInput)="onInput($event)"
+      (ionCancel)="onCancel($event)">
+    </ion-searchbar>
+    <p class="error" *ngIf="errors['location']">{{errors['location']}}</p>
+    <ion-list class="placeList" *ngIf="predictions && predictions.length > 0">
+      <ion-item *ngFor="let place of predictions" (tap)="detail(place)">
+        <p>{{place.description}}</p>
+      </ion-item>
+    </ion-list>
+    <div #map id="map"></div>
+    <ion-item>
+      <ion-label floating>Title</ion-label>
+      <ion-input type="text" formControlName="title" (keypress)="removeErrors('title')"></ion-input>
+    </ion-item>
+    <p class="error" *ngIf="errors['title']">{{errors['title']}}</p>
+    <ion-item>
+      <ion-label floating>Description</ion-label>
+      <ion-textarea rows="3" formControlName="description" (keypress)="removeErrors('description')"></ion-textarea>
+    </ion-item>
+    <p class="error" *ngIf="errors['description']">{{errors['description']}}</p>
+    <button ion-button round color="primary" (click)="showButtons()">Upload an image</button>
+    <img *ngIf="image" [src]="image | formatImage">
+    <input id="file-input" type="file" name="name" accept="image/*" style="display: none;" (change)="readFile()"/>
+  </form>
+</ion-content>

@@ -1,0 +1,17 @@
+page-map {
+    #map {
+        height: 100%;
+    }
+
+    #details {
+        position: absolute;
+        top: 45px;
+        width: 100%;
+    }
+
+    #btnClose {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+    }
+}

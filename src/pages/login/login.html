@@ -1,0 +1,24 @@
+
+<ion-content padding>
+  <!-- <img src="assets/imgs/logo.png" width="100"> -->
+  <h1>BouncePal</h1>
+  <ion-list *ngIf="(isAndroid && !confirmationResult) || (!isAndroid && !verificationId)">
+    <ion-item>
+      <ion-label for="phone" floating>Phone Number</ion-label>
+      <ion-input type="number" [(ngModel)]="phoneNumber"></ion-input>
+    </ion-item>
+    <div padding-top id="recaptcha-container"></div>
+    <button ion-button block class="btn-login" (click)="login()" [disabled]="!phoneNumber || (isAndroid && !isRecaptchaVerified)">Send SMS Code</button>
+  </ion-list>
+  <ion-list *ngIf="confirmationResult || verificationId">
+    <ion-item>
+      <ion-label floating>Verification Code</ion-label>
+      <ion-input type="text" name="code" [(ngModel)]="verificationCode"></ion-input>
+    </ion-item>
+    <button ion-button block (click)="verifyCode()" [disabled]="!verificationCode">Verify</button>
+  </ion-list>
+  <div *ngIf="(isAndroid && !confirmationResult) || (!isAndroid && !verificationId)">
+    <p text-center>- OR -</p>
+    <button ion-button block class="btn-facebook" (click)="loginFB()">Facebook Login</button>
+  </div>
+</ion-content>

@@ -1,0 +1,32 @@
+page-home {
+    .scroll-content {
+        background-color: #d9edff;
+    }
+
+    .btnStar {
+        padding: 0;
+
+        ion-icon {
+            font-size: 40px;
+            padding: 0;
+        }
+    }
+    
+    .flex {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+    .comment {
+        white-space: normal;
+    }
+
+    .date {
+        font-size: 12px;
+    }
+
+    ion-card {
+        border-radius: 10px !important;
+    }
+}

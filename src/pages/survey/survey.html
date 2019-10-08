@@ -1,0 +1,33 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Survey</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="addSurvey()">
+        <ion-icon name="add-circle"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <h5 *ngIf="surveys.length === 0" text-center>There are no surveys.</h5>
+  <ion-list>
+    <ion-item-sliding *ngFor="let s of surveys">
+      <ion-item>
+        <ion-avatar item-start>
+          <img [src]="s.image ? (s.image | formatImage) : 'assets/imgs/group.png'">
+        </ion-avatar>
+        <h2>{{s.message || s.type}}</h2>
+        <ion-buttons item-end>
+          <button ion-button icon-only outline small color="danger" (click)="delete(s)">
+            <ion-icon name="trash"></ion-icon>
+          </button>
+        </ion-buttons>
+      </ion-item>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

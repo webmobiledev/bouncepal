@@ -1,0 +1,88 @@
+
+<ion-header>
+  <ion-navbar>
+    <ion-title>Answer</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <h5 *ngIf="surveys.length === 0" text-center>There are no surveys that you can answer.<br>Please check if you have any invited groups.</h5>
+  <ion-card *ngFor="let s of surveys">
+    <ion-item>
+      <ion-avatar item-start>
+        <img src="assets/imgs/small-logo.png">
+      </ion-avatar>
+      <h2>{{s.type}}</h2>
+      <ion-note>
+        {{s.created_at | timeFormat}}
+      </ion-note>
+    </ion-item>
+    <img *ngIf="s.image" [src]="s.image | formatImage">
+    <ion-card-content>
+      <p>{{s.message}}</p>
+    </ion-card-content>
+    <ion-row *ngIf="s.type === 'Question'">
+      <ion-col *ngFor="let a of s.answers">
+        <button ion-button icon-start clear small (click)="vote(a, s)">
+          <div>{{a}} {{s[a] ? s[a] : 0}}</div>
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="s.type === 'Review'" padding-bottom>
+      <p padding-left *ngIf="!checkIfReviewed(s)">Total Review:</p>
+      <ion-col col-12 padding-left *ngIf="!checkIfReviewed(s)">
+        <button class="btnSmallStar" [color]="s.avgReview >= 1 ? 'red' : 'lightRed'" ion-button icon-start clear><ion-icon name="star"></ion-icon></button>
+        <button class="btnSmallStar" [color]="s.avgReview >= 2 ? 'red' : 'lightRed'" ion-button icon-start clear><ion-icon name="star"></ion-icon></button>
+        <button class="btnSmallStar" [color]="s.avgReview >= 3 ? 'red' : 'lightRed'" ion-button icon-start clear><ion-icon name="star"></ion-icon></button>
+        <button class="btnSmallStar" [color]="s.avgReview >= 4 ? 'red' : 'lightRed'" ion-button icon-start clear><ion-icon name="star"></ion-icon></button>
+        <button class="btnSmallStar" [color]="s.avgReview >= 5 ? 'red' : 'lightRed'" ion-button icon-start clear><ion-icon name="star"></ion-icon></button>
+      </ion-col>
+      <p padding-left *ngIf="!checkIfReviewed(s)">Your Review:</p>
+      <ion-col col-12 padding-left>
+        <button class="btnStar" [color]="checkIfReviewed(s) && s.avgReview >= 1 ? 'red' : 'lightRed'" (click)="review(s, 1)" ion-button icon-start clear><ion-icon name="star"></ion-icon></button>
+        <button class="btnStar" [color]="checkIfReviewed(s) && s.avgReview >= 2 ? 'red' : 'lightRed'" (click)="review(s, 2)" ion-button icon-start clear><ion-icon name="star"></ion-icon></button>
+        <button class="btnStar" [color]="checkIfReviewed(s) && s.avgReview >= 3 ? 'red' : 'lightRed'" (click)="review(s, 3)" ion-button icon-start clear><ion-icon name="star"></ion-icon></button>
+        <button class="btnStar" [color]="checkIfReviewed(s) && s.avgReview >= 4 ? 'red' : 'lightRed'" (click)="review(s, 4)" ion-button icon-start clear><ion-icon name="star"></ion-icon></button>
+        <button class="btnStar" [color]="checkIfReviewed(s) && s.avgReview >= 5 ? 'red' : 'lightRed'" (click)="review(s, 5)" ion-button icon-start clear><ion-icon name="star"></ion-icon></button>
+      </ion-col>
+      <ion-col color="primary" padding-left>Reviews: {{s.reviewUsers ? s.reviewUsers.length : 0}}</ion-col>
+      <ion-col color="primary">Total Review: {{s.avgReview ? s.avgReview : 0}}</ion-col>
+      <p padding-left *ngIf="checkIfReviewed(s)">You already reviwed for this survey</p>
+    </ion-row>
+    <ion-row *ngIf="s.type === 'Recommendation'">
+      <ion-col>
+        <button ion-button icon-start clear small (click)="showComment = true">
+          <ion-icon name="text"></ion-icon>
+          <div>{{s.comments ? s.comments.length : 0}} Recommendations</div>
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-list *ngIf="showComment && s.comments && s.type === 'Recommendation'">
+      <ion-item *ngFor="let c of s.comments">
+        <p class="comment">{{c.comment}}</p>
+        <p class="date" text-right>{{c.created_at | timeFormat}}</p>
+      </ion-item>
+    </ion-list>
+    <ion-item *ngIf="showComment && s.type === 'Recommendation'">
+      <ion-label floating>Enter a recommendation</ion-label>
+      <ion-textarea rows="3" [(ngModel)]="commentMessage"></ion-textarea>
+    </ion-item>
+    <ion-item *ngIf="showComment && s.type === 'Recommendation'">
+      <ion-buttons item-end>
+        <button ion-button icon-start clear small *ngIf="showComment" (click)="showComment = false"><ion-icon name="md-close"></ion-icon></button>
+        <button ion-button icon-start clear small *ngIf="showComment" (click)="comment(s)"><ion-icon name="md-checkmark"></ion-icon></button>
+      </ion-buttons>
+    </ion-item>
+    <ion-row *ngIf="s.type === 'Poll'">
+      <ion-col text-center>
+        <img *ngIf="s.poll1Img" [src]="s.poll1Img | formatImage" height="300" style="object-fit:contain;">
+        <button ion-button small (click)="vote('poll1', s)">{{s.poll1 ? s.poll1 : 0}} Vote</button>
+      </ion-col>
+      <ion-col text-center>
+        <img *ngIf="s.poll2Img" [src]="s.poll2Img | formatImage" height="300" style="object-fit:contain;">
+        <button ion-button small (click)="vote('poll2', s)">{{s.poll2 ? s.poll2 : 0}} Vote</button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+</ion-content>
